@@ -21,15 +21,6 @@ async function addNewBook(req, res) {
     }
 }
 
-async function getAllBooks(req, res) {
-    try {
-        const books = await Book.find();
-        res.status(200).json({ success: true, totalRecords: books.length, books });
-    } catch (error) {
-        res.status(500).json({ success: false, error: 'Internal Server Error' });
-    }
-}
-
 async function deleteBook(req, res) {
     try {
         const { id } = req.params;
@@ -92,6 +83,36 @@ async function updateBook(req, res) {
         return res.status(500).json({ success: false, message: 'Internal Server Error' });
     }
 }
+
+async function getAllBooks(req, res) {
+    try {
+        const { author, category, publisher, language, title, sort } = req.query;
+
+        let filter = {};
+        if (author) filter.author = { $regex: author, $options: 'i' };
+        if (category) filter.category = { $regex: category, $options: 'i' };
+        if (publisher) filter.publisher = { $regex: publisher, $options: 'i' };
+        if (language) filter.language = { $regex: language, $options: 'i' };
+        if (title) filter.title = { $regex: title, $options: 'i' };
+
+        let sortOption = {};
+        if (sort === 'title') sortOption.title = 1;
+        else if (sort === 'pricePerDay') sortOption.pricePerDay = 1;
+        else if (sort === 'author') sortOption.author = 1;
+
+        const books = await Book.find(filter).sort(sortOption);
+
+        res.status(200).json({
+            success: true,
+            total: books.length,
+            data: books,
+        });
+    } catch (error) {
+        console.error('Error fetching books:', error);
+        res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+}
+
 
 export {
     addNewBook,
