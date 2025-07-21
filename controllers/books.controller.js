@@ -60,7 +60,7 @@ async function updateBook(req, res) {
         if (updateFields.title && updateFields.title !== existingBook.title) {
             const titleExists = await Book.findOne({
                 title: { $regex: `^${updateFields.title}$`, $options: 'i' },
-                _id: { $ne: id } 
+                _id: { $ne: id }
             });
             if (titleExists) {
                 return res.status(400).json({ success: false, message: 'Another book with this title already exists' });
