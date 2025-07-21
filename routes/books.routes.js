@@ -1,5 +1,5 @@
 import express from 'express';
-import { addNewBook, getAllBooks } from '../controllers/books.controller.js';
+import { addNewBook, deleteBook, getAllBooks } from '../controllers/books.controller.js';
 const booksRouter = express.Router();
 
 import { body } from "express-validator";
@@ -54,6 +54,7 @@ export const bookValidator = [
 ];
 
 booksRouter.post('/add-new-book', bookValidator, validateAdmin, addNewBook);
-booksRouter.get('/get-all-books', getAllBooks)
+booksRouter.get('/get-all-books', getAllBooks);
+booksRouter.delete('/delete-book/:id', validateAdmin, deleteBook);
 
 export default booksRouter;

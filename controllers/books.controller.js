@@ -24,12 +24,32 @@ async function addNewBook(req, res) {
 async function getAllBooks(req, res) {
     try {
         const books = await Book.find();
-        res.status(200).json({ success: true, totalRecords: books.length, books});
+        res.status(200).json({ success: true, totalRecords: books.length, books });
     } catch (error) {
         res.status(500).json({ success: false, error: 'Internal Server Error' });
     }
 }
+
+async function deleteBook(req, res) {
+    try {
+        const { id } = req.params;
+
+        const book = await Book.findById(id);
+        if (!book) {
+            return res.status(404).json({ success: false, message: 'Book not found' });
+        }
+
+        await Book.deleteOne({ _id: id });
+
+        return res.status(200).json({ success: true, message: 'Book deleted successfully' });
+    } catch (error) {
+        console.error('Error deleting book:', error);
+        res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+}
+
 export {
     addNewBook,
     getAllBooks,
+    deleteBook,
 }
