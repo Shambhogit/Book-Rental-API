@@ -1,6 +1,6 @@
 import express from 'express';
 import { body } from 'express-validator';
-import {loginUser, registerUser} from '../controllers/user.controllers.js';
+import {loginUser, registerUser} from '../controllers/user.controller.js';
 
 export const registerUserValidator = [
   body('name')

@@ -7,6 +7,7 @@ import express from 'express';
 const app = express();
 
 import connectToDB from './database/databaseConnection.js';
+import booksRouter from './routes/books.routes.js';
 connectToDB();
 
 app.use(express.json());
@@ -14,6 +15,7 @@ app.use(express.urlencoded({extended:true}));
 
 
 app.use('/api/v1/user', userRouter);
+app.use('/api/v1/books', booksRouter);
 
 
 app.listen(process.env.PORT, (err)=>{
