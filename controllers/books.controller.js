@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Book from "../models/book.model.js";
 import { validationResult } from "express-validator";
 
@@ -86,7 +87,7 @@ async function updateBook(req, res) {
 
 async function getAllBooks(req, res) {
     try {
-        const { author, category, publisher, language, title, sort } = req.query;
+        const { author, category, publisher, language, title, sort, id } = req.query;
 
         let filter = {};
         if (author) filter.author = { $regex: author, $options: 'i' };
@@ -94,6 +95,9 @@ async function getAllBooks(req, res) {
         if (publisher) filter.publisher = { $regex: publisher, $options: 'i' };
         if (language) filter.language = { $regex: language, $options: 'i' };
         if (title) filter.title = { $regex: title, $options: 'i' };
+        if (id) filter._id = { id }; if (id && mongoose.Types.ObjectId.isValid(id)) {
+            filter._id = new mongoose.Types.ObjectId(id);
+        }
 
         let sortOption = {};
         if (sort === 'title') sortOption.title = 1;
