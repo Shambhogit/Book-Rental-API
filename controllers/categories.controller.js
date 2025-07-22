@@ -30,6 +30,17 @@ async function addCategory(req, res) {
     }
 }
 
+async function getAllCategories(req, res) {
+    try {
+        const categories = await Category.find();
+        return res.status(200).json({success:true, count:categories.length, categories});
+
+    } catch (error) {
+        console.error('Add Category Error:', error);
+        return res.status(500).json({ success: false, error: 'Internal Server Error' });
+    }
+}
 export {
     addCategory,
+    getAllCategories,
 }
